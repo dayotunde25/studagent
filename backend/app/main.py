@@ -147,6 +147,38 @@ def create_application() -> FastAPI:
             {"request": request, "current_user": current_user, "title": "Admin Dashboard - Studagent"}
         )
 
+    @app.get("/contact", response_class=HTMLResponse)
+    async def contact_page(request: Request):
+        """Contact page."""
+        return templates.TemplateResponse(
+            "contact.html",
+            {"request": request, "title": "Contact Us - Studagent"}
+        )
+
+    @app.get("/feedback", response_class=HTMLResponse)
+    async def feedback_page(request: Request):
+        """Feedback page."""
+        return templates.TemplateResponse(
+            "feedback.html",
+            {"request": request, "title": "Feedback - Studagent"}
+        )
+
+    @app.get("/study", response_class=HTMLResponse)
+    async def study_page(request: Request, current_user: User = Depends(get_current_user)):
+        """Study tools page."""
+        return templates.TemplateResponse(
+            "study.html",
+            {"request": request, "current_user": current_user, "title": "Study Tools - Studagent"}
+        )
+
+    @app.get("/network", response_class=HTMLResponse)
+    async def network_page(request: Request, current_user: User = Depends(get_current_user)):
+        """Networking page."""
+        return templates.TemplateResponse(
+            "network.html",
+            {"request": request, "current_user": current_user, "title": "Networking - Studagent"}
+        )
+
     @app.get("/health")
     async def health_check():
         """Basic health check endpoint."""

@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="auth-logo">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <h1>Join Studagent</h1>
+            <p>Create your account and start your learning journey</p>
+        </div>
+
+        <form class="auth-form" action="/api/v1/auth/register" method="POST" id="registerForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="first_name" class="form-label">First Name</label>
+                    <input
+                        type="text"
+                        id="first_name"
+                        name="first_name"
+                        class="form-control"
+                        placeholder="Enter your first name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name" class="form-label">Last Name</label>
+                    <input
+                        type="text"
+                        id="last_name"
+                        name="last_name"
+                        class="form-control"
+                        placeholder="Enter your last name"
+                        required
+                    >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="form-control"
+                    placeholder="Enter your email"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="display_name" class="form-label">Display Name</label>
+                <input
+                    type="text"
+                    id="display_name"
+                    name="display_name"
+                    class="form-control"
+                    placeholder="Choose a display name"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <div class="password-input">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-control"
+                        placeholder="Create a strong password"
+                        required
+                    >
+                    <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="password-strength">
+                    <div class="strength-meter">
+                        <div class="strength-fill" id="strengthFill"></div>
+                    </div>
+                    <span class="strength-text" id="strengthText">Password strength</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password_confirm" class="form-label">Confirm Password</label>
+                <div class="password-input">
+                    <input
+                        type="password"
+                        id="password_confirm"
+                        name="password_confirm"
+                        class="form-control"
+                        placeholder="Confirm your password"
+                        required
+                    >
+                    <button type="button" class="password-toggle" onclick="togglePassword('password_confirm')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="role" class="form-label">I am a</label>
+                <div class="role-selector">
+                    <label class="role-option">
+                        <input type="radio" name="role" value="student" checked>
+                        <span class="role-card">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Student</span>
+                        </span>
+                    </label>
+                    <label class="role-option">
+                        <input type="radio" name="role" value="mentor">
+                        <span class="role-card">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>Mentor</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="agree_terms" id="agree_terms" required>
+                    <span class="checkmark"></span>
+                    I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a>
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+                <i class="fas fa-user-plus"></i>
+                Create Account
+            </button>
+        </form>
+
+        <div class="auth-divider">
+            <span>or</span>
+        </div>
+
+        <div class="auth-social">
+            <button class="btn btn-social btn-google">
+                <i class="fab fa-google"></i>
+                Continue with Google
+            </button>
+            <button class="btn btn-social btn-github">
+                <i class="fab fa-github"></i>
+                Continue with GitHub
+            </button>
+        </div>
+
+        <div class="auth-footer">
+            <p>Already have an account?
+                <a href="/login" class="auth-link">Sign in</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="auth-sidebar">
+        <div class="auth-sidebar-content">
+            <h2>Why Choose Studagent?</h2>
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <i class="fas fa-brain"></i>
+                    <div>
+                        <h4>AI-Powered Learning</h4>
+                        <p>Get personalized study recommendations and instant feedback</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-users"></i>
+                    <div>
+                        <h4>Study Community</h4>
+                        <p>Connect with like-minded students and experienced mentors</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-trophy"></i>
+                    <div>
+                        <h4>Achieve Goals</h4>
+                        <p>Track progress and celebrate milestones on your learning journey</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <h4>Secure & Private</h4>
+                        <p>Your data is protected with enterprise-grade security</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Password strength checker
+    document.getElementById('password').addEventListener('input', function() {
+        checkPasswordStrength(this.value);
+    });
+
+    function checkPasswordStrength(password) {
+        let strength = 0;
+        let feedback = [];
+
+        if (password.length >= 8) strength++;
+        else feedback.push('At least 8 characters');
+
+        if (/[a-z]/.test(password)) strength++;
+        else feedback.push('Lowercase letter');
+
+        if (/[A-Z]/.test(password)) strength++;
+        else feedback.push('Uppercase letter');
+
+        if (/[0-9]/.test(password)) strength++;
+        else feedback.push('Number');
+
+        if (/[^A-Za-z0-9]/.test(password)) strength++;
+        else feedback.push('Special character');
+
+        const strengthFill = document.getElementById('strengthFill');
+        const strengthText = document.getElementById('strengthText');
+
+        const percentages = [0, 25, 50, 75, 100];
+        const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#22c55e'];
+        const texts = ['Very weak', 'Weak', 'Fair', 'Good', 'Strong'];
+
+        strengthFill.style.width = percentages[strength] + '%';
+        strengthFill.style.backgroundColor = colors[strength];
+        strengthText.textContent = texts[strength];
+        strengthText.style.color = colors[strength];
+    }
+
+    // Handle registration form submission
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const data = {
+            email: formData.get('email'),
+            password: formData.get('password'),
+            display_name: formData.get('display_name'),
+            first_name: formData.get('first_name'),
+            last_name: formData.get('last_name'),
+            role: formData.get('role') || 'student',
+            is_active: true
+        };
+
+        try {
+            const response = await fetch('/api/v1/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                showToast('Success', 'Account created successfully! Redirecting to login...', 'success');
+
+                // Redirect to login
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 2000);
+            } else {
+                showToast('Error', result.detail || 'Registration failed', 'error');
+            }
+        } catch (error) {
+            showToast('Error', 'Network error. Please try again.', 'error');
+        }
+    });
+
+    // Toggle password visibility
+    function togglePassword(inputId) {
+        const input = document.getElementById(inputId);
+        const toggleBtn = input.parentNode.querySelector('.password-toggle i');
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            toggleBtn.className = 'fas fa-eye-slash';
+        } else {
+            input.type = 'password';
+            toggleBtn.className = 'fas fa-eye';
+        }
+    }
+</script>
+{% endblock %}

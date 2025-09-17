@@ -1,0 +1,434 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <!-- Admin Header -->
+    <div class="admin-header">
+        <div class="admin-title">
+            <h1><i class="fas fa-cog"></i> Admin Dashboard</h1>
+            <p>System monitoring and management</p>
+        </div>
+        <div class="admin-actions">
+            <button class="btn btn-outline" onclick="refreshStats()">
+                <i class="fas fa-sync-alt"></i>
+                Refresh
+            </button>
+            <button class="btn btn-primary" onclick="runMaintenance()">
+                <i class="fas fa-wrench"></i>
+                Maintenance
+            </button>
+        </div>
+    </div>
+
+    <!-- System Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+                <h3 id="total-users">0</h3>
+                <p>Total Users</p>
+                <span class="stat-change" id="users-change">+12%</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="stat-content">
+                <h3 id="total-documents">0</h3>
+                <p>Documents</p>
+                <span class="stat-change" id="documents-change">+8%</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <div class="stat-content">
+                <h3 id="ai-requests">0</h3>
+                <p>AI Requests</p>
+                <span class="stat-change" id="ai-change">+15%</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-server"></i>
+            </div>
+            <div class="stat-content">
+                <h3 id="system-health">98%</h3>
+                <p>System Health</p>
+                <span class="stat-status healthy">Healthy</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Admin Grid -->
+    <div class="admin-grid">
+        <!-- System Health -->
+        <div class="admin-card">
+            <div class="card-header">
+                <h3><i class="fas fa-heartbeat"></i> System Health</h3>
+            </div>
+            <div class="card-body">
+                <div class="health-status" id="health-status">
+                    <!-- Health status will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Models Status -->
+        <div class="admin-card">
+            <div class="card-header">
+                <h3><i class="fas fa-robot"></i> AI Models Status</h3>
+                <button class="btn btn-sm" onclick="refreshModels()">
+                    <i class="fas fa-sync"></i>
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="models-grid" id="models-grid">
+                    <!-- Model status will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Logs -->
+        <div class="admin-card">
+            <div class="card-header">
+                <h3><i class="fas fa-list"></i> Recent System Logs</h3>
+                <select id="log-level" onchange="loadLogs()">
+                    <option value="">All Levels</option>
+                    <option value="ERROR">Errors</option>
+                    <option value="WARNING">Warnings</option>
+                    <option value="INFO">Info</option>
+                </select>
+            </div>
+            <div class="card-body">
+                <div class="logs-container" id="logs-container">
+                    <!-- Logs will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- User Management -->
+        <div class="admin-card">
+            <div class="card-header">
+                <h3><i class="fas fa-users-cog"></i> User Management</h3>
+                <button class="btn btn-sm" onclick="loadUsers()">
+                    <i class="fas fa-sync"></i>
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="users-table" id="users-table">
+                    <!-- Users will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Background Tasks -->
+        <div class="admin-card">
+            <div class="card-header">
+                <h3><i class="fas fa-tasks"></i> Background Tasks</h3>
+            </div>
+            <div class="card-body">
+                <div class="tasks-grid">
+                    <div class="task-item">
+                        <div class="task-info">
+                            <h4>Document Processing</h4>
+                            <p>PDF text extraction and AI summary generation</p>
+                        </div>
+                        <div class="task-status">
+                            <span class="status-badge active">Active</span>
+                        </div>
+                    </div>
+
+                    <div class="task-item">
+                        <div class="task-info">
+                            <h4>Scholarship Scraping</h4>
+                            <p>Periodic opportunity data collection</p>
+                        </div>
+                        <div class="task-status">
+                            <span class="status-badge active">Active</span>
+                        </div>
+                    </div>
+
+                    <div class="task-item">
+                        <div class="task-info">
+                            <h4>User Matching</h4>
+                            <p>AI-powered study partner recommendations</p>
+                        </div>
+                        <div class="task-status">
+                            <span class="status-badge active">Active</span>
+                        </div>
+                    </div>
+
+                    <div class="task-item">
+                        <div class="task-info">
+                            <h4>Data Cleanup</h4>
+                            <p>Automated cleanup of old logs and files</p>
+                        </div>
+                        <div class="task-status">
+                            <span class="status-badge idle">Idle</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="admin-card">
+            <div class="card-header">
+                <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+            </div>
+            <div class="card-body">
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="runMaintenance()">
+                        <i class="fas fa-wrench"></i>
+                        <span>Run Maintenance</span>
+                    </button>
+
+                    <button class="action-btn" onclick="scrapeOpportunities()">
+                        <i class="fas fa-search"></i>
+                        <span>Scrape Opportunities</span>
+                    </button>
+
+                    <button class="action-btn" onclick="clearCache()">
+                        <i class="fas fa-trash"></i>
+                        <span>Clear Cache</span>
+                    </button>
+
+                    <button class="action-btn" onclick="exportData()">
+                        <i class="fas fa-download"></i>
+                        <span>Export Data</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Load admin data on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadSystemStats();
+        loadHealthStatus();
+        loadModelsStatus();
+        loadLogs();
+        loadUsers();
+    });
+
+    async function loadSystemStats() {
+        try {
+            const response = await fetch('/api/v1/admin/stats');
+            const stats = await response.json();
+
+            if (response.ok) {
+                document.getElementById('total-users').textContent = stats.users.total;
+                document.getElementById('total-documents').textContent = stats.content.documents;
+                document.getElementById('ai-requests').textContent = '1,247'; // Mock data
+                document.getElementById('system-health').textContent = '98%';
+            }
+        } catch (error) {
+            console.error('Failed to load system stats:', error);
+        }
+    }
+
+    async function loadHealthStatus() {
+        try {
+            const response = await fetch('/api/v1/admin/health');
+            const health = await response.json();
+
+            const healthContainer = document.getElementById('health-status');
+            healthContainer.innerHTML = `
+                <div class="health-item ${health.status === 'healthy' ? 'healthy' : 'unhealthy'}">
+                    <div class="health-indicator">
+                        <i class="fas fa-${health.status === 'healthy' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                        <span>${health.status.toUpperCase()}</span>
+                    </div>
+                    <div class="health-details">
+                        <p>Last checked: ${new Date(health.timestamp).toLocaleString()}</p>
+                        ${Object.entries(health.services).map(([service, status]) =>
+                            `<p><strong>${service}:</strong> ${status}</p>`
+                        ).join('')}
+                    </div>
+                </div>
+            `;
+        } catch (error) {
+            console.error('Failed to load health status:', error);
+        }
+    }
+
+    async function loadModelsStatus() {
+        try {
+            const response = await fetch('/api/v1/admin/models/status');
+            const models = await response.json();
+
+            const modelsContainer = document.getElementById('models-grid');
+            modelsContainer.innerHTML = Object.entries(models.models).map(([name, status]) => `
+                <div class="model-item ${status.can_execute ? 'healthy' : 'unhealthy'}">
+                    <div class="model-info">
+                        <h4>${name}</h4>
+                        <p>Status: ${status.can_execute ? 'Available' : 'Unavailable'}</p>
+                    </div>
+                    <div class="model-actions">
+                        ${!status.can_execute ?
+                            `<button class="btn btn-sm" onclick="retryModel('${name}')">
+                                <i class="fas fa-redo"></i> Retry
+                            </button>` : ''
+                        }
+                    </div>
+                </div>
+            `).join('');
+        } catch (error) {
+            console.error('Failed to load models status:', error);
+        }
+    }
+
+    async function loadLogs() {
+        try {
+            const level = document.getElementById('log-level').value;
+            const response = await fetch(`/api/v1/admin/logs?level=${level}&limit=20`);
+            const logs = await response.json();
+
+            const logsContainer = document.getElementById('logs-container');
+            logsContainer.innerHTML = logs.map(log => `
+                <div class="log-item log-${log.level.toLowerCase()}">
+                    <div class="log-meta">
+                        <span class="log-level">${log.level}</span>
+                        <span class="log-time">${new Date(log.created_at).toLocaleString()}</span>
+                    </div>
+                    <div class="log-message">${log.message}</div>
+                    <div class="log-details">
+                        <small>Module: ${log.module} | Function: ${log.function}</small>
+                    </div>
+                </div>
+            `).join('');
+        } catch (error) {
+            console.error('Failed to load logs:', error);
+        }
+    }
+
+    async function loadUsers() {
+        try {
+            const response = await fetch('/api/v1/admin/users?limit=10');
+            const users = await response.json();
+
+            const usersContainer = document.getElementById('users-table');
+            usersContainer.innerHTML = `
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${users.map(user => `
+                            <tr>
+                                <td>${user.display_name}</td>
+                                <td>${user.email}</td>
+                                <td><span class="role-badge ${user.role}">${user.role}</span></td>
+                                <td><span class="status-badge ${user.is_active ? 'active' : 'inactive'}">${user.is_active ? 'Active' : 'Inactive'}</span></td>
+                                <td>${new Date(user.created_at).toLocaleDateString()}</td>
+                                <td>
+                                    <button class="btn btn-sm" onclick="viewUser(${user.id})">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        } catch (error) {
+            console.error('Failed to load users:', error);
+        }
+    }
+
+    async function retryModel(modelName) {
+        try {
+            const response = await fetch(`/api/v1/admin/models/${modelName}/retry`, {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                showToast('Success', `Model ${modelName} reset successfully`, 'success');
+                loadModelsStatus();
+            } else {
+                showToast('Error', 'Failed to retry model', 'error');
+            }
+        } catch (error) {
+            showToast('Error', 'Network error', 'error');
+        }
+    }
+
+    async function runMaintenance() {
+        if (!confirm('Run system maintenance? This may take a few minutes.')) return;
+
+        try {
+            const response = await fetch('/api/v1/admin/maintenance/cleanup', {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                showToast('Success', 'Maintenance completed successfully', 'success');
+                loadSystemStats();
+            } else {
+                showToast('Error', 'Maintenance failed', 'error');
+            }
+        } catch (error) {
+            showToast('Error', 'Network error', 'error');
+        }
+    }
+
+    async function scrapeOpportunities() {
+        try {
+            const response = await fetch('/api/v1/admin/maintenance/scrape-opportunities', {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                showToast('Success', 'Opportunity scraping completed', 'success');
+            } else {
+                showToast('Error', 'Scraping failed', 'error');
+            }
+        } catch (error) {
+            showToast('Error', 'Network error', 'error');
+        }
+    }
+
+    function refreshStats() {
+        loadSystemStats();
+        loadHealthStatus();
+        loadModelsStatus();
+    }
+
+    function refreshModels() {
+        loadModelsStatus();
+    }
+
+    function clearCache() {
+        showToast('Info', 'Cache clearing not implemented yet', 'warning');
+    }
+
+    function exportData() {
+        showToast('Info', 'Data export not implemented yet', 'warning');
+    }
+
+    function viewUser(userId) {
+        showToast('Info', 'User details view not implemented yet', 'warning');
+    }
+</script>
+{% endblock %}

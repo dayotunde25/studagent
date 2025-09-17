@@ -1,0 +1,410 @@
+{% extends "base.html" %}
+
+{% block title %}Feedback - Studagent{% endblock %}
+
+{% block content %}
+<div class="feedback-container">
+    <!-- Feedback Header -->
+    <div class="feedback-header">
+        <div class="feedback-hero">
+            <h1>Share Your Feedback</h1>
+            <p>Your feedback helps us improve Studagent and provide better learning experiences for everyone.</p>
+        </div>
+    </div>
+
+    <!-- Feedback Content -->
+    <div class="feedback-content">
+        <div class="feedback-grid">
+            <!-- Feedback Form -->
+            <div class="feedback-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-comments"></i> Tell Us What You Think</h2>
+                    <p>We value your opinion and use feedback to continuously improve our platform.</p>
+                </div>
+                <div class="card-body">
+                    <form class="feedback-form" id="feedbackForm">
+                        <!-- Rating Section -->
+                        <div class="rating-section">
+                            <label class="form-label">How would you rate your overall experience?</label>
+                            <div class="rating-stars" id="ratingStars">
+                                <i class="far fa-star" data-rating="1"></i>
+                                <i class="far fa-star" data-rating="2"></i>
+                                <i class="far fa-star" data-rating="3"></i>
+                                <i class="far fa-star" data-rating="4"></i>
+                                <i class="far fa-star" data-rating="5"></i>
+                            </div>
+                            <input type="hidden" id="rating" name="rating" required>
+                        </div>
+
+                        <!-- Category Selection -->
+                        <div class="form-group">
+                            <label for="category" class="form-label">What aspect would you like to provide feedback on?</label>
+                            <select id="category" name="category" class="form-control" required>
+                                <option value="">Select a category</option>
+                                <option value="general">General Experience</option>
+                                <option value="ai-features">AI Features</option>
+                                <option value="upload">Document Upload</option>
+                                <option value="study-tools">Study Tools</option>
+                                <option value="networking">Networking</option>
+                                <option value="mobile">Mobile Experience</option>
+                                <option value="performance">Performance</option>
+                                <option value="design">Design & UI</option>
+                                <option value="support">Customer Support</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Feedback Type -->
+                        <div class="form-group">
+                            <label class="form-label">What type of feedback is this?</label>
+                            <div class="feedback-type">
+                                <label class="type-option">
+                                    <input type="radio" name="feedback_type" value="bug" required>
+                                    <span class="type-label">
+                                        <i class="fas fa-bug"></i>
+                                        Bug Report
+                                    </span>
+                                </label>
+                                <label class="type-option">
+                                    <input type="radio" name="feedback_type" value="feature">
+                                    <span class="type-label">
+                                        <i class="fas fa-lightbulb"></i>
+                                        Feature Request
+                                    </span>
+                                </label>
+                                <label class="type-option">
+                                    <input type="radio" name="feedback_type" value="improvement">
+                                    <span class="type-label">
+                                        <i class="fas fa-chart-line"></i>
+                                        Improvement
+                                    </span>
+                                </label>
+                                <label class="type-option">
+                                    <input type="radio" name="feedback_type" value="praise">
+                                    <span class="type-label">
+                                        <i class="fas fa-heart"></i>
+                                        Praise
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Subject -->
+                        <div class="form-group">
+                            <label for="subject" class="form-label">Subject</label>
+                            <input
+                                type="text"
+                                id="subject"
+                                name="subject"
+                                class="form-control"
+                                placeholder="Brief summary of your feedback"
+                                required
+                            >
+                        </div>
+
+                        <!-- Message -->
+                        <div class="form-group">
+                            <label for="message" class="form-label">Detailed Feedback</label>
+                            <textarea
+                                id="message"
+                                name="message"
+                                class="form-control"
+                                rows="6"
+                                placeholder="Please provide as much detail as possible to help us understand your experience..."
+                                required
+                            ></textarea>
+                        </div>
+
+                        <!-- Contact Info -->
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email Address (Optional)</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                class="form-control"
+                                placeholder="your.email@example.com"
+                            >
+                            <small class="form-help">We'll only use this to follow up on your feedback if needed.</small>
+                        </div>
+
+                        <!-- Screenshot Upload -->
+                        <div class="form-group">
+                            <label for="screenshot" class="form-label">Attach Screenshot (Optional)</label>
+                            <div class="file-upload">
+                                <input
+                                    type="file"
+                                    id="screenshot"
+                                    name="screenshot"
+                                    accept="image/*"
+                                    class="file-input"
+                                >
+                                <label for="screenshot" class="file-label">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span>Choose file or drag here</span>
+                                </label>
+                                <div class="file-preview" id="filePreview"></div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <i class="fas fa-paper-plane"></i>
+                            Submit Feedback
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Feedback Info -->
+            <div class="feedback-info">
+                <!-- Recent Updates -->
+                <div class="info-card">
+                    <div class="info-header">
+                        <i class="fas fa-rocket"></i>
+                        <h3>Recent Updates</h3>
+                    </div>
+                    <div class="info-content">
+                        <div class="update-list">
+                            <div class="update-item">
+                                <div class="update-date">Dec 15, 2024</div>
+                                <div class="update-content">
+                                    <h4>Enhanced AI Summaries</h4>
+                                    <p>Improved summary quality and added support for more document types.</p>
+                                </div>
+                            </div>
+                            <div class="update-item">
+                                <div class="update-date">Dec 10, 2024</div>
+                                <div class="update-content">
+                                    <h4>New Study Groups Feature</h4>
+                                    <p>Connect with fellow students and form collaborative study groups.</p>
+                                </div>
+                            </div>
+                            <div class="update-item">
+                                <div class="update-date">Dec 5, 2024</div>
+                                <div class="update-content">
+                                    <h4>Mobile App Improvements</h4>
+                                    <p>Better mobile experience with improved navigation and performance.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature Requests -->
+                <div class="info-card">
+                    <div class="info-header">
+                        <i class="fas fa-vote-yea"></i>
+                        <h3>Most Requested Features</h3>
+                    </div>
+                    <div class="info-content">
+                        <div class="feature-requests">
+                            <div class="feature-item">
+                                <div class="feature-votes">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>127</span>
+                                </div>
+                                <div class="feature-content">
+                                    <h4>Offline Mode</h4>
+                                    <p>Access study materials without internet connection</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-votes">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>89</span>
+                                </div>
+                                <div class="feature-content">
+                                    <h4>Voice Notes</h4>
+                                    <p>Record and transcribe voice notes for study sessions</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-votes">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>76</span>
+                                </div>
+                                <div class="feature-content">
+                                    <h4>Advanced Analytics</h4>
+                                    <p>Detailed learning analytics and progress insights</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Options -->
+                <div class="info-card">
+                    <div class="info-header">
+                        <i class="fas fa-headset"></i>
+                        <h3>Other Ways to Reach Us</h3>
+                    </div>
+                    <div class="info-content">
+                        <div class="contact-options">
+                            <a href="/contact" class="contact-option">
+                                <i class="fas fa-envelope"></i>
+                                <span>Contact Support</span>
+                            </a>
+                            <a href="https://discord.gg/studagent" class="contact-option" target="_blank">
+                                <i class="fab fa-discord"></i>
+                                <span>Join Discord Community</span>
+                            </a>
+                            <a href="https://twitter.com/studagent" class="contact-option" target="_blank">
+                                <i class="fab fa-twitter"></i>
+                                <span>Follow on Twitter</span>
+                            </a>
+                            <a href="https://github.com/studagent" class="contact-option" target="_blank">
+                                <i class="fab fa-github"></i>
+                                <span>GitHub Repository</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback Stats -->
+                <div class="info-card">
+                    <div class="info-header">
+                        <i class="fas fa-chart-bar"></i>
+                        <h3>Community Impact</h3>
+                    </div>
+                    <div class="info-content">
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-number">2,847</div>
+                                <div class="stat-label">Feedback Submissions</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">156</div>
+                                <div class="stat-label">Features Implemented</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">4.8/5</div>
+                                <div class="stat-label">Average Rating</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">24h</div>
+                                <div class="stat-label">Average Response Time</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Star rating functionality
+    const stars = document.querySelectorAll('#ratingStars i');
+    const ratingInput = document.getElementById('rating');
+
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            const rating = this.getAttribute('data-rating');
+            ratingInput.value = rating;
+
+            // Update star display
+            stars.forEach((s, index) => {
+                if (index < rating) {
+                    s.className = 'fas fa-star';
+                } else {
+                    s.className = 'far fa-star';
+                }
+            });
+        });
+
+        star.addEventListener('mouseover', function() {
+            const rating = this.getAttribute('data-rating');
+            stars.forEach((s, index) => {
+                if (index < rating) {
+                    s.className = 'fas fa-star';
+                } else {
+                    s.className = 'far fa-star';
+                }
+            });
+        });
+    });
+
+    document.getElementById('ratingStars').addEventListener('mouseleave', function() {
+        const currentRating = ratingInput.value;
+        stars.forEach((s, index) => {
+            if (index < currentRating) {
+                s.className = 'fas fa-star';
+            } else {
+                s.className = 'far fa-star';
+            }
+        });
+    });
+
+    // File upload preview
+    document.getElementById('screenshot').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('filePreview');
+
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                showToast('Error', 'File size must be less than 5MB', 'error');
+                e.target.value = '';
+                return;
+            }
+
+            if (!file.type.startsWith('image/')) {
+                showToast('Error', 'Please select an image file', 'error');
+                e.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.innerHTML = `
+                    <div class="file-info">
+                        <img src="${e.target.result}" alt="Screenshot preview" class="file-thumbnail">
+                        <div class="file-details">
+                            <p><strong>${file.name}</strong></p>
+                            <p>${formatFileSize(file.size)}</p>
+                        </div>
+                    </div>
+                `;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.innerHTML = '';
+        }
+    });
+
+    // Handle feedback form submission
+    document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        if (!ratingInput.value) {
+            showToast('Error', 'Please provide a star rating', 'error');
+            return;
+        }
+
+        const formData = new FormData(this);
+
+        try {
+            // For now, just show success message
+            // In production, this would send to backend API
+            showToast('Success', 'Thank you for your feedback! We appreciate your input.', 'success');
+
+            // Reset form
+            this.reset();
+            stars.forEach(s => s.className = 'far fa-star');
+            document.getElementById('filePreview').innerHTML = '';
+
+        } catch (error) {
+            showToast('Error', 'Failed to submit feedback. Please try again.', 'error');
+        }
+    });
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+</script>
+{% endblock %}

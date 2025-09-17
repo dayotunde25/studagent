@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - Studagent{% endblock %}
+
+{% block content %}
+<div class="contact-container">
+    <!-- Contact Header -->
+    <div class="contact-header">
+        <div class="contact-hero">
+            <h1>Get in Touch</h1>
+            <p>Have questions or need support? We're here to help you succeed in your learning journey.</p>
+        </div>
+    </div>
+
+    <!-- Contact Content -->
+    <div class="contact-content">
+        <div class="contact-grid">
+            <!-- Contact Form -->
+            <div class="contact-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-envelope"></i> Send us a Message</h2>
+                    <p>Fill out the form below and we'll get back to you within 24 hours.</p>
+                </div>
+                <div class="card-body">
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first_name" class="form-label">First Name</label>
+                                <input
+                                    type="text"
+                                    id="first_name"
+                                    name="first_name"
+                                    class="form-control"
+                                    placeholder="Your first name"
+                                    required
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <input
+                                    type="text"
+                                    id="last_name"
+                                    name="last_name"
+                                    class="form-control"
+                                    placeholder="Your last name"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                class="form-control"
+                                placeholder="your.email@example.com"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject" class="form-label">Subject</label>
+                            <select id="subject" name="subject" class="form-control" required>
+                                <option value="">Select a subject</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="support">Technical Support</option>
+                                <option value="billing">Billing Question</option>
+                                <option value="feature">Feature Request</option>
+                                <option value="bug">Bug Report</option>
+                                <option value="partnership">Partnership</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea
+                                id="message"
+                                name="message"
+                                class="form-control"
+                                rows="6"
+                                placeholder="Tell us how we can help you..."
+                                required
+                            ></textarea>
+                        </div>
+
+                        <div class="form-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="newsletter" id="newsletter">
+                                <span class="checkmark"></span>
+                                Subscribe to our newsletter for updates and tips
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <i class="fas fa-paper-plane"></i>
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <!-- Contact Methods -->
+                <div class="info-card">
+                    <div class="info-header">
+                        <i class="fas fa-phone"></i>
+                        <h3>Phone Support</h3>
+                    </div>
+                    <div class="info-content">
+                        <p>Speak directly with our support team</p>
+                        <a href="tel:+1-555-STUDENT" class="contact-link">
+                            <i class="fas fa-phone"></i>
+                            +1 (555) 788-3368
+                        </a>
+                        <p class="contact-note">Mon-Fri: 9AM - 6PM EST</p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-header">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Email Support</h3>
+                    </div>
+                    <div class="info-content">
+                        <p>Get help via email</p>
+                        <a href="mailto:support@studagent.com" class="contact-link">
+                            <i class="fas fa-envelope"></i>
+                            support@studagent.com
+                        </a>
+                        <p class="contact-note">We respond within 24 hours</p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-header">
+                        <i class="fas fa-comments"></i>
+                        <h3>Live Chat</h3>
+                    </div>
+                    <div class="info-content">
+                        <p>Chat with us instantly</p>
+                        <button class="btn btn-outline btn-full" onclick="startLiveChat()">
+                            <i class="fas fa-comments"></i>
+                            Start Live Chat
+                        </button>
+                        <p class="contact-note">Available 24/7</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Section -->
+                <div class="faq-section">
+                    <h3>Frequently Asked Questions</h3>
+                    <div class="faq-list">
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span>How do I upload documents?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>You can upload PDF, DOC, and TXT files up to 10MB each. Go to the Upload page and drag & drop your files or click to browse.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span>How does AI summarization work?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Our AI analyzes your documents and creates concise summaries, flashcards, and quizzes tailored to your learning style.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span>Is my data secure?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Yes, we use enterprise-grade encryption and security measures. Your documents and personal information are fully protected.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                <span>How do I find study partners?</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Our AI matching system connects you with students who share your interests and academic goals. Visit the Network page to get started.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Office Info -->
+                <div class="office-info">
+                    <h3>Visit Our Office</h3>
+                    <div class="office-details">
+                        <p><i class="fas fa-map-marker-alt"></i> 123 Learning Street<br>San Francisco, CA 94105</p>
+                        <p><i class="fas fa-clock"></i> Monday - Friday: 9:00 AM - 6:00 PM PST</p>
+                        <p><i class="fas fa-clock"></i> Saturday: 10:00 AM - 4:00 PM PST</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Handle contact form submission
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const data = {
+            first_name: formData.get('first_name'),
+            last_name: formData.get('last_name'),
+            email: formData.get('email'),
+            subject: formData.get('subject'),
+            message: formData.get('message'),
+            newsletter: formData.get('newsletter') ? true : false
+        };
+
+        try {
+            // For now, just show success message
+            // In production, this would send to backend API
+            showToast('Success', 'Thank you for your message! We\'ll get back to you soon.', 'success');
+
+            // Reset form
+            this.reset();
+
+        } catch (error) {
+            showToast('Error', 'Failed to send message. Please try again.', 'error');
+        }
+    });
+
+    // FAQ toggle functionality
+    function toggleFAQ(button) {
+        const faqItem = button.parentElement;
+        const answer = faqItem.querySelector('.faq-answer');
+        const icon = button.querySelector('i');
+
+        if (answer.style.display === 'block') {
+            answer.style.display = 'none';
+            icon.style.transform = 'rotate(0deg)';
+        } else {
+            answer.style.display = 'block';
+            icon.style.transform = 'rotate(180deg)';
+        }
+    }
+
+    // Live chat functionality
+    function startLiveChat() {
+        showToast('Info', 'Live chat feature coming soon!', 'warning');
+        // In production, this would integrate with a live chat service
+    }
+</script>
+{% endblock %}

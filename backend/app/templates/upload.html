@@ -1,0 +1,431 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="upload-container">
+    <!-- Upload Header -->
+    <div class="upload-header">
+        <div class="upload-hero">
+            <h1><i class="fas fa-cloud-upload-alt"></i> Upload Documents</h1>
+            <p>Upload your study materials and let AI transform them into powerful learning tools.</p>
+        </div>
+    </div>
+
+    <!-- Upload Zone -->
+    <div class="upload-zone">
+        <div class="upload-card">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-content">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <h3>Drag & Drop Your Files Here</h3>
+                    <p>or <span class="upload-link" onclick="document.getElementById('fileInput').click()">browse files</span></p>
+                    <div class="upload-formats">
+                        <span class="format-tag">PDF</span>
+                        <span class="format-tag">DOC</span>
+                        <span class="format-tag">DOCX</span>
+                        <span class="format-tag">TXT</span>
+                    </div>
+                    <p class="upload-limit">Maximum file size: 10MB</p>
+                </div>
+                <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.txt" style="display: none;">
+            </div>
+
+            <!-- Upload Progress -->
+            <div class="upload-progress" id="uploadProgress" style="display: none;">
+                <div class="progress-header">
+                    <h4>Uploading Files...</h4>
+                    <span id="progressText">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- File List -->
+    <div class="files-section">
+        <div class="section-header">
+            <h2><i class="fas fa-file-alt"></i> Your Documents</h2>
+            <div class="section-actions">
+                <select id="sortSelect" onchange="sortFiles()">
+                    <option value="date">Sort by Date</option>
+                    <option value="name">Sort by Name</option>
+                    <option value="size">Sort by Size</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="files-grid" id="filesGrid">
+            <!-- Files will be loaded here -->
+            <div class="empty-state">
+                <i class="fas fa-file-alt"></i>
+                <h3>No documents uploaded yet</h3>
+                <p>Upload your first document to get started with AI-powered study tools.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Processing Queue -->
+    <div class="processing-section" id="processingSection" style="display: none;">
+        <div class="section-header">
+            <h2><i class="fas fa-cog"></i> Processing Queue</h2>
+        </div>
+
+        <div class="processing-list" id="processingList">
+            <!-- Processing items will be shown here -->
+        </div>
+    </div>
+</div>
+
+<!-- File Preview Modal -->
+<div class="modal" id="fileModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">Document Preview</h3>
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="file-preview-content" id="filePreviewContent">
+                <!-- File content will be loaded here -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal()">Close</button>
+            <button class="btn btn-primary" onclick="processFile()">
+                <i class="fas fa-magic"></i>
+                Generate Study Tools
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    let uploadedFiles = [];
+    let processingFiles = [];
+
+    // Initialize drag and drop
+    document.addEventListener('DOMContentLoaded', function() {
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        // Drag and drop events
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        uploadArea.addEventListener('drop', handleDrop, false);
+        fileInput.addEventListener('change', handleFileSelect, false);
+
+        // Load existing files
+        loadUserFiles();
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    function highlight() {
+        document.getElementById('uploadArea').classList.add('dragover');
+    }
+
+    function unhighlight() {
+        document.getElementById('uploadArea').classList.remove('dragover');
+    }
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+    }
+
+    function handleFileSelect(e) {
+        const files = e.target.files;
+        handleFiles(files);
+    }
+
+    function handleFiles(files) {
+        [...files].forEach(uploadFile);
+    }
+
+    function uploadFile(file) {
+        // Validate file
+        if (!validateFile(file)) return;
+
+        // Add to processing queue
+        const fileId = Date.now() + Math.random();
+        const fileData = {
+            id: fileId,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            status: 'uploading',
+            progress: 0
+        };
+
+        processingFiles.push(fileData);
+        updateProcessingList();
+
+        // Show progress
+        showUploadProgress();
+
+        // Simulate upload progress
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(progressInterval);
+                fileUploaded(fileData, file);
+            }
+            updateProgress(progress);
+        }, 200);
+    }
+
+    function validateFile(file) {
+        const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
+        const maxSize = 10 * 1024 * 1024; // 10MB
+
+        if (!allowedTypes.includes(file.type)) {
+            showToast('Error', 'Please select a valid file type (PDF, DOC, DOCX, TXT)', 'error');
+            return false;
+        }
+
+        if (file.size > maxSize) {
+            showToast('Error', 'File size must be less than 10MB', 'error');
+            return false;
+        }
+
+        return true;
+    }
+
+    function showUploadProgress() {
+        document.getElementById('uploadProgress').style.display = 'block';
+    }
+
+    function updateProgress(progress) {
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+
+        progressFill.style.width = progress + '%';
+        progressText.textContent = Math.round(progress) + '%';
+    }
+
+    function fileUploaded(fileData, file) {
+        fileData.status = 'uploaded';
+        fileData.progress = 100;
+
+        // Add to uploaded files
+        uploadedFiles.push({
+            id: fileData.id,
+            name: fileData.name,
+            size: fileData.size,
+            type: fileData.type,
+            uploaded_at: new Date().toISOString(),
+            status: 'processing'
+        });
+
+        // Update UI
+        updateFilesGrid();
+        updateProcessingList();
+
+        // Hide progress after a delay
+        setTimeout(() => {
+            document.getElementById('uploadProgress').style.display = 'none';
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('progressText').textContent = '0%';
+        }, 1000);
+
+        showToast('Success', 'File uploaded successfully! Processing...', 'success');
+    }
+
+    function updateFilesGrid() {
+        const filesGrid = document.getElementById('filesGrid');
+
+        if (uploadedFiles.length === 0) {
+            filesGrid.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>No documents uploaded yet</h3>
+                    <p>Upload your first document to get started with AI-powered study tools.</p>
+                </div>
+            `;
+            return;
+        }
+
+        filesGrid.innerHTML = uploadedFiles.map(file => `
+            <div class="file-card" onclick="previewFile('${file.id}')">
+                <div class="file-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="file-info">
+                    <h4>${file.name}</h4>
+                    <p>${formatFileSize(file.size)} • ${new Date(file.uploaded_at).toLocaleDateString()}</p>
+                </div>
+                <div class="file-status">
+                    <span class="status-badge ${file.status}">${file.status}</span>
+                </div>
+                <div class="file-actions">
+                    <button class="btn btn-sm" onclick="event.stopPropagation(); processFile('${file.id}')">
+                        <i class="fas fa-magic"></i>
+                    </button>
+                    <button class="btn btn-sm" onclick="event.stopPropagation(); deleteFile('${file.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function updateProcessingList() {
+        const processingSection = document.getElementById('processingSection');
+        const processingList = document.getElementById('processingList');
+
+        if (processingFiles.length === 0) {
+            processingSection.style.display = 'none';
+            return;
+        }
+
+        processingSection.style.display = 'block';
+        processingList.innerHTML = processingFiles.map(file => `
+            <div class="processing-item">
+                <div class="processing-info">
+                    <h4>${file.name}</h4>
+                    <p>${formatFileSize(file.size)}</p>
+                </div>
+                <div class="processing-status">
+                    <span class="status-badge ${file.status}">${file.status}</span>
+                    ${file.status === 'uploading' ? `<div class="mini-progress"><div class="mini-fill" style="width: ${file.progress}%"></div></div>` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function loadUserFiles() {
+        // Mock data - in production, this would load from API
+        uploadedFiles = [
+            {
+                id: '1',
+                name: 'Machine Learning Notes.pdf',
+                size: 2048576,
+                type: 'application/pdf',
+                uploaded_at: '2024-12-15T10:30:00Z',
+                status: 'processed'
+            },
+            {
+                id: '2',
+                name: 'Data Structures Guide.docx',
+                size: 1536000,
+                type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                uploaded_at: '2024-12-14T15:45:00Z',
+                status: 'processed'
+            }
+        ];
+
+        updateFilesGrid();
+    }
+
+    function previewFile(fileId) {
+        const file = uploadedFiles.find(f => f.id === fileId);
+        if (!file) return;
+
+        const modal = document.getElementById('fileModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const previewContent = document.getElementById('filePreviewContent');
+
+        modalTitle.textContent = file.name;
+        previewContent.innerHTML = `
+            <div class="file-details">
+                <div class="file-meta">
+                    <p><strong>Size:</strong> ${formatFileSize(file.size)}</p>
+                    <p><strong>Type:</strong> ${file.type}</p>
+                    <p><strong>Uploaded:</strong> ${new Date(file.uploaded_at).toLocaleString()}</p>
+                    <p><strong>Status:</strong> <span class="status-badge ${file.status}">${file.status}</span></p>
+                </div>
+                <div class="file-preview-placeholder">
+                    <i class="fas fa-file-alt"></i>
+                    <p>File preview not available</p>
+                    <small>Click "Generate Study Tools" to process this document</small>
+                </div>
+            </div>
+        `;
+
+        modal.style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('fileModal').style.display = 'none';
+    }
+
+    function processFile(fileId) {
+        const file = uploadedFiles.find(f => f.id === fileId);
+        if (!file) return;
+
+        showToast('Info', 'Processing file with AI...', 'info');
+
+        // In production, this would call the backend API
+        setTimeout(() => {
+            file.status = 'processed';
+            updateFilesGrid();
+            closeModal();
+            showToast('Success', 'File processed successfully! Study tools are ready.', 'success');
+        }, 2000);
+    }
+
+    function deleteFile(fileId) {
+        if (!confirm('Are you sure you want to delete this file?')) return;
+
+        uploadedFiles = uploadedFiles.filter(f => f.id !== fileId);
+        updateFilesGrid();
+        showToast('Success', 'File deleted successfully', 'success');
+    }
+
+    function sortFiles() {
+        const sortBy = document.getElementById('sortSelect').value;
+
+        uploadedFiles.sort((a, b) => {
+            switch (sortBy) {
+                case 'name':
+                    return a.name.localeCompare(b.name);
+                case 'size':
+                    return b.size - a.size;
+                case 'date':
+                default:
+                    return new Date(b.uploaded_at) - new Date(a.uploaded_at);
+            }
+        });
+
+        updateFilesGrid();
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('fileModal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+</script>
+{% endblock %}
