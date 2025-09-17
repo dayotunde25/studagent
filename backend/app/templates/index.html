@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-container">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="gradient-text">AI-Powered</span><br>
+                Student Super-App
+            </h1>
+            <p class="hero-subtitle">
+                Transform your learning experience with intelligent document analysis,
+                personalized study tools, and smart networking features.
+            </p>
+            <div class="hero-actions">
+                {% if not current_user %}
+                    <a href="/register" class="btn btn-primary btn-lg">
+                        <i class="fas fa-rocket"></i>
+                        Get Started Free
+                    </a>
+                    <a href="/login" class="btn btn-outline btn-lg">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Sign In
+                    </a>
+                {% else %}
+                    <a href="/dashboard" class="btn btn-primary btn-lg">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Go to Dashboard
+                    </a>
+                    <a href="/upload" class="btn btn-outline btn-lg">
+                        <i class="fas fa-upload"></i>
+                        Upload Document
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="floating-cards">
+                <div class="card floating-card card-1">
+                    <div class="card-header">
+                        <i class="fas fa-file-alt"></i>
+                        <h4>Document Analysis</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Upload PDFs and get AI-generated summaries, flashcards, and quizzes instantly.</p>
+                    </div>
+                </div>
+                <div class="card floating-card card-2">
+                    <div class="card-header">
+                        <i class="fas fa-brain"></i>
+                        <h4>Smart Learning</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Personalized study recommendations and adaptive learning paths.</p>
+                    </div>
+                </div>
+                <div class="card floating-card card-3">
+                    <div class="card-header">
+                        <i class="fas fa-users"></i>
+                        <h4>Study Networks</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Connect with like-minded students and form study groups.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="container">
+        <div class="section-header">
+            <h2>Powerful Features for Modern Students</h2>
+            <p>Everything you need to excel in your studies, powered by cutting-edge AI technology.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-upload"></i>
+                </div>
+                <h3>Smart Document Upload</h3>
+                <p>Upload PDFs, documents, and notes. Our AI automatically extracts key information and generates study materials.</p>
+                <ul class="feature-list">
+                    <li>Support for PDF, DOC, TXT files</li>
+                    <li>Automatic text extraction</li>
+                    <li>Real-time processing</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>AI Study Tools</h3>
+                <p>Get instant summaries, flashcards, and quizzes from your documents. Learn smarter, not harder.</p>
+                <ul class="feature-list">
+                    <li>AI-generated summaries</li>
+                    <li>Interactive flashcards</li>
+                    <li>Custom quizzes</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <h3>Smart Planner</h3>
+                <p>Organize your study schedule with intelligent deadline tracking and reminder systems.</p>
+                <ul class="feature-list">
+                    <li>Deadline management</li>
+                    <li>Smart reminders</li>
+                    <li>Progress tracking</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Study Networking</h3>
+                <p>Connect with students who share your interests and academic goals. Form study groups and collaborate.</p>
+                <ul class="feature-list">
+                    <li>AI-powered matching</li>
+                    <li>Study group creation</li>
+                    <li>Collaborative tools</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3>Scholarship Alerts</h3>
+                <p>Get personalized scholarship and internship recommendations based on your profile and interests.</p>
+                <ul class="feature-list">
+                    <li>Personalized recommendations</li>
+                    <li>Application tracking</li>
+                    <li>Deadline alerts</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Progress Analytics</h3>
+                <p>Track your learning progress with detailed analytics and insights to optimize your study habits.</p>
+                <ul class="feature-list">
+                    <li>Study time tracking</li>
+                    <li>Performance analytics</li>
+                    <li>Improvement suggestions</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number" data-target="10000">0</div>
+                <div class="stat-label">Active Students</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="50000">0</div>
+                <div class="stat-label">Documents Processed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="1000000">0</div>
+                <div class="stat-label">Flashcards Generated</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="50000">0</div>
+                <div class="stat-label">Study Groups</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Ready to Transform Your Learning?</h2>
+            <p>Join thousands of students who are already using Studagent to excel in their studies.</p>
+            {% if not current_user %}
+                <a href="/register" class="btn btn-primary btn-xl">
+                    <i class="fas fa-rocket"></i>
+                    Start Learning Smarter Today
+                </a>
+            {% else %}
+                <a href="/dashboard" class="btn btn-primary btn-xl">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Go to Your Dashboard
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Animate statistics
+    function animateStats() {
+        const statNumbers = document.querySelectorAll('.stat-number');
+
+        statNumbers.forEach(stat => {
+            const target = parseInt(stat.getAttribute('data-target'));
+            const duration = 2000; // 2 seconds
+            const step = target / (duration / 16); // 60 FPS
+            let current = 0;
+
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    stat.textContent = target.toLocaleString();
+                    clearInterval(timer);
+                } else {
+                    stat.textContent = Math.floor(current).toLocaleString();
+                }
+            }, 16);
+        });
+    }
+
+    // Trigger animations on scroll
+    function handleScroll() {
+        const statsSection = document.querySelector('.stats');
+        const statsTop = statsSection.offsetTop;
+        const scrollPosition = window.scrollY + window.innerHeight;
+
+        if (scrollPosition > statsTop + 100) {
+            animateStats();
+            window.removeEventListener('scroll', handleScroll);
+        }
+    }
+
+    window.addEventListener('scroll', handleScroll);
+</script>
+{% endblock %}

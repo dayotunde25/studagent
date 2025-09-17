@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+        <div class="welcome-content">
+            <h1>Welcome back, {{ current_user.display_name }}! 👋</h1>
+            <p>Ready to continue your learning journey? Here's what's happening today.</p>
+        </div>
+        <div class="quick-actions">
+            <a href="/upload" class="btn btn-primary">
+                <i class="fas fa-upload"></i>
+                Upload Document
+            </a>
+            <a href="/study" class="btn btn-outline">
+                <i class="fas fa-book"></i>
+                Study Tools
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="stats-overview">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="stat-content">
+                <h3 id="documents-count">0</h3>
+                <p>Documents Uploaded</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <div class="stat-content">
+                <h3 id="flashcards-count">0</h3>
+                <p>Flashcards Created</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+                <h3 id="matches-count">0</h3>
+                <p>Study Matches</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="stat-content">
+                <h3 id="deadlines-count">0</h3>
+                <p>Active Deadlines</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Grid -->
+    <div class="dashboard-grid">
+        <!-- Recent Activity -->
+        <div class="dashboard-card activity-card">
+            <div class="card-header">
+                <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                <a href="#" class="card-link">View All</a>
+            </div>
+            <div class="card-body">
+                <div class="activity-list" id="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p>Uploaded "Machine Learning Notes.pdf"</p>
+                            <span class="activity-time">2 hours ago</span>
+                        </div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p>Generated 15 flashcards from your document</p>
+                            <span class="activity-time">4 hours ago</span>
+                        </div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p>Matched with 3 study partners</p>
+                            <span class="activity-time">1 day ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Deadlines -->
+        <div class="dashboard-card deadlines-card">
+            <div class="card-header">
+                <h3><i class="fas fa-calendar-alt"></i> Upcoming Deadlines</h3>
+                <a href="/deadlines" class="card-link">Manage All</a>
+            </div>
+            <div class="card-body">
+                <div class="deadlines-list" id="deadlines-list">
+                    <!-- Deadlines will be loaded here -->
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-plus"></i>
+                        <p>No upcoming deadlines</p>
+                        <a href="/deadlines" class="btn btn-sm">Add Deadline</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Study Progress -->
+        <div class="dashboard-card progress-card">
+            <div class="card-header">
+                <h3><i class="fas fa-chart-line"></i> Study Progress</h3>
+                <span class="period-selector">This Week</span>
+            </div>
+            <div class="card-body">
+                <div class="progress-stats">
+                    <div class="progress-item">
+                        <div class="progress-label">
+                            <span>Documents Read</span>
+                            <span class="progress-value">7/10</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 70%"></div>
+                        </div>
+                    </div>
+
+                    <div class="progress-item">
+                        <div class="progress-label">
+                            <span>Flashcards Reviewed</span>
+                            <span class="progress-value">45/50</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 90%"></div>
+                        </div>
+                    </div>
+
+                    <div class="progress-item">
+                        <div class="progress-label">
+                            <span>Study Hours</span>
+                            <span class="progress-value">12/15</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 80%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="dashboard-card actions-card">
+            <div class="card-header">
+                <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+            </div>
+            <div class="card-body">
+                <div class="quick-actions-grid">
+                    <a href="/upload" class="action-item">
+                        <i class="fas fa-upload"></i>
+                        <span>Upload Document</span>
+                    </a>
+
+                    <a href="/study" class="action-item">
+                        <i class="fas fa-brain"></i>
+                        <span>Generate Quiz</span>
+                    </a>
+
+                    <a href="/network" class="action-item">
+                        <i class="fas fa-users"></i>
+                        <span>Find Partners</span>
+                    </a>
+
+                    <a href="/deadlines" class="action-item">
+                        <i class="fas fa-calendar-plus"></i>
+                        <span>Add Deadline</span>
+                    </a>
+
+                    <a href="/groups" class="action-item">
+                        <i class="fas fa-user-friends"></i>
+                        <span>Join Group</span>
+                    </a>
+
+                    <a href="/opportunities" class="action-item">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>View Scholarships</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Study Groups -->
+        <div class="dashboard-card groups-card">
+            <div class="card-header">
+                <h3><i class="fas fa-users"></i> My Study Groups</h3>
+                <a href="/groups" class="card-link">View All</a>
+            </div>
+            <div class="card-body">
+                <div class="groups-list" id="groups-list">
+                    <div class="empty-state">
+                        <i class="fas fa-user-friends"></i>
+                        <p>Not a member of any groups yet</p>
+                        <a href="/groups" class="btn btn-sm">Browse Groups</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Insights -->
+        <div class="dashboard-card insights-card">
+            <div class="card-header">
+                <h3><i class="fas fa-lightbulb"></i> AI Insights</h3>
+            </div>
+            <div class="card-body">
+                <div class="insights-list">
+                    <div class="insight-item">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="insight-content">
+                            <p>Your study streak is at 7 days! Keep it up!</p>
+                        </div>
+                    </div>
+
+                    <div class="insight-item">
+                        <i class="fas fa-brain"></i>
+                        <div class="insight-content">
+                            <p>Try reviewing flashcards on Machine Learning - you're 80% complete.</p>
+                        </div>
+                    </div>
+
+                    <div class="insight-item">
+                        <i class="fas fa-users"></i>
+                        <div class="insight-content">
+                            <p>3 new study partners match your Computer Science interests.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Load dashboard data
+    document.addEventListener('DOMContentLoaded', function() {
+        loadDashboardStats();
+        loadUpcomingDeadlines();
+        loadUserGroups();
+    });
+
+    async function loadDashboardStats() {
+        try {
+            // Load user stats from API
+            const response = await fetch('/api/v1/users/me');
+            const userData = await response.json();
+
+            if (response.ok) {
+                // Update stats (mock data for now)
+                document.getElementById('documents-count').textContent = '12';
+                document.getElementById('flashcards-count').textContent = '156';
+                document.getElementById('matches-count').textContent = '8';
+                document.getElementById('deadlines-count').textContent = '5';
+            }
+        } catch (error) {
+            console.error('Failed to load dashboard stats:', error);
+        }
+    }
+
+    async function loadUpcomingDeadlines() {
+        try {
+            const response = await fetch('/api/v1/deadlines/upcoming?days=7');
+            const deadlines = await response.json();
+
+            if (response.ok && deadlines.length > 0) {
+                const deadlinesList = document.getElementById('deadlines-list');
+                deadlinesList.innerHTML = deadlines.map(deadline => `
+                    <div class="deadline-item ${getDeadlineUrgency(deadline.due_date)}">
+                        <div class="deadline-content">
+                            <h4>${deadline.title}</h4>
+                            <p>Due: ${new Date(deadline.due_date).toLocaleDateString()}</p>
+                        </div>
+                        <div class="deadline-priority priority-${deadline.priority}">
+                            ${deadline.priority}
+                        </div>
+                    </div>
+                `).join('');
+            }
+        } catch (error) {
+            console.error('Failed to load deadlines:', error);
+        }
+    }
+
+    async function loadUserGroups() {
+        try {
+            const response = await fetch('/api/v1/groups');
+            const groups = await response.json();
+
+            if (response.ok && groups.length > 0) {
+                const groupsList = document.getElementById('groups-list');
+                const userGroups = groups.filter(group => group.is_member);
+
+                if (userGroups.length > 0) {
+                    groupsList.innerHTML = userGroups.slice(0, 3).map(group => `
+                        <div class="group-item">
+                            <div class="group-avatar">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="group-content">
+                                <h4>${group.name}</h4>
+                                <p>${group.member_count} members</p>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load groups:', error);
+        }
+    }
+
+    function getDeadlineUrgency(dueDate) {
+        const now = new Date();
+        const due = new Date(dueDate);
+        const diffDays = Math.ceil((due - now) / (1000 * 60 * 60 * 24));
+
+        if (diffDays < 0) return 'overdue';
+        if (diffDays === 0) return 'due-today';
+        if (diffDays <= 2) return 'urgent';
+        if (diffDays <= 7) return 'upcoming';
+        return 'future';
+    }
+</script>
+{% endblock %}
