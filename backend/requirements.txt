@@ -10,7 +10,7 @@ alembic==1.12.1
 # Authentication
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
-python-multipart==0.0.6
+python-multipart==0.0.31
 
 # HTTP Client
 httpx==0.25.2
@@ -49,7 +49,7 @@ mypy==1.7.1
 python-dotenv==1.0.0
 
 # Security
-cryptography==41.0.7
+cryptography==50.0.0
 
 # Utilities
 pydantic==2.5.0
